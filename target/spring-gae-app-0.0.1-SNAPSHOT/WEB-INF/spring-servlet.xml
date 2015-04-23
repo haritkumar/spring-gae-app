@@ -1,0 +1,78 @@
+<beans  xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		
+		xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+		
+ 
+	<context:component-scan base-package="com.springgae.app" />
+	<mvc:annotation-driven/>
+	
+	<!-- Configuration defining views files -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+	
+	<bean id="customUserDetailsService" class="com.springgae.app.service.CustomUserDetailsService"></bean>
+	
+	<!-- i18n -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="/WEB-INF/i18n/messages" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+ 
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en" />
+        <property name="cookieName" value="myAppLocaleCookie"></property>
+        <property name="cookieMaxAge" value="3600"></property>
+    </bean>
+ 
+    <mvc:interceptors>
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang" />
+        </bean>
+    </mvc:interceptors>
+	<!-- i18n -->
+	
+ 
+   <!-- Properties configuration -->
+      <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/properties/mail.properties</value>
+                <value>/WEB-INF/properties/server.properties</value>
+            </list>
+        </property> 
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+      </bean>
+   <!-- Properties configuration -->
+
+  <!-- Logout Back Stop -->
+    
+      <mvc:interceptors> <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+                <property name="cacheSeconds" value="0"/>
+                <property name="useExpiresHeader" value="false"/>
+                <property name="useCacheControlHeader" value="true"/>
+                <property name="useCacheControlNoStore" value="true"/>
+            </bean>     
+      </mvc:interceptors>
+      
+  <!-- Logout Back Stop -->    
+</beans>
